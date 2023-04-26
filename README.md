@@ -8,6 +8,23 @@ an item from a list i.e. a database or a folder from many recent ones.
 [frameless windows]: /astzweig/swiftui-frameless-window#framelesswindow
 
 ## Usage
+Create a launcher window:
+
+```swift
+import SwiftUI
+import LauncherWindow
+
+@main
+struct YourApp: App {
+    var body: some Scene {
+        LauncherWindow(withId: "launcher") {
+            ActionItemsView()
+        } listItems: {
+            ListItemsView()
+        }
+    }
+}
+```
 
 ## Documentation
 The library has enriched symbol documentation for [DocC].
@@ -24,7 +41,7 @@ let package = Package(
     // name, platforms, products, etc.
     dependencies: [
         // other dependencies
-        .package(url: "https://github.com/astzweig/swiftui-launcher-window", from: "0.0.1"),
+        .package(url: "https://github.com/astzweig/swiftui-launcher-window", from: "1.0.0"),
     ],
     targets: [
         .executableTarget(name: "<command-line-tool>", dependencies: [
