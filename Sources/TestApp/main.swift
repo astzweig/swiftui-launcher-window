@@ -17,6 +17,10 @@ struct NewSourceFolderButton: View {
 			}
 		}.buttonStyle(BorderlessButtonStyle())
 	}
+
+	static func modify(window: NSWindow) {
+		print("Modify window of TestApp was called successfully.")
+	}
 }
 
 struct RecentSourceFolderListItem: View {
@@ -43,11 +47,15 @@ struct RecentSourceFolderListItem: View {
 
 struct TestApp: App {
 	var body: some Scene {
-		LauncherWindow(withId: "single-window", andTitle: "Single Window") {
+		LauncherWindow("Single Window", id: "single-window", windowInitializer: self.modify(window:)) {
 			NewSourceFolderButton()
 		} listItems: {
 			RecentSourceFolderListItem(url: URL(string: "/Users/Shared")!)
 		}
+	}
+
+	func modify(window: NSWindow) {
+		print("Modify window of TestApp was called successfully.")
 	}
 }
 

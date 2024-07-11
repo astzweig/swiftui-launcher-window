@@ -9,7 +9,7 @@ let package = Package(
         .library(name: "LauncherWindow", targets: ["LauncherWindow"])
     ],
     dependencies: [
-        .package(url: "https://github.com/astzweig/swiftui-frameless-window", from: "1.0.0")
+		.package(url: "https://github.com/astzweig/swiftui-frameless-window", from: "2.1.0")
     ],
     targets: [
         .target(name: "LauncherWindow", dependencies: [

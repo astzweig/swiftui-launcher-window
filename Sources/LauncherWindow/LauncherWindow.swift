@@ -13,11 +13,12 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 	private let appName: String
 	private let version: String
 	private let iconAssetName: String
+	private let windowInitializer: FramelessWindow.WindowInitializer
 	private let actionItems: () -> ActionItems
 	private let listItems: () -> ListItems
 
 	public var body: some Scene {
-		FramelessWindow(withId: self.id) {
+		FramelessWindow(self.titleKey, id: self.id, windowInitializer: self.modify(window:)) {
 			HStack {
 				VStack {
 					Spacer()
@@ -34,39 +35,42 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 					self.listItems()
 				}
 			}
-		}
+		}.windowResizability(.contentSize)
 	}
 
 	/**
 	 Initialize a new LauncherWindow Scene.
 
 	 - Parameters:
-	 - id: A unique string identifier that you can use to open the window.
-	 - titleKey: A localized string key to use for the window’s title in system menus and in the
+	 - title: A localized string key to use for the window’s title in system menus and in the
 	 window’s title bar. Provide a title that describes the purpose of the window. As
 	 a launcher window does not have a title bar and does not appear in the application
-	 window menu, this value has no effect. Default value is `"Launcher"`.
+	 window menu, this value has no effect. Default title is "Launcher".
+	 - id: A unique string identifier that you can use to open the window. Defaults to a UUID.
 	 - appName: The app name to show in the welcome message.
 	 - version: The version to show below the welcome message.
 	 - iconAssetName: The name of the image asset containing the icon. Note: The default AppIcon is
 	 an icon set and not an image set.
+	 - windowInitializer: Closure to modify the containing NSWindow of the scene.
 	 - actionItems: The view content to display under the welcome message.
 	 - listItems: The view content of the list on the right side of the launcher window.
 	 */
 	public init(
-		withId id: String,
-		andTitle titleKey: LocalizedStringKey = "Launcher",
+		_ title: LocalizedStringKey? = nil,
+		id: String?,
 		appName: String,
 		version: String,
 		iconAssetName: String,
+		windowInitializer: FramelessWindow.WindowInitializer? = nil,
 		actionItems: @escaping () -> ActionItems,
 		listItems: @escaping () -> ListItems
 	) {
-		self.titleKey = titleKey
-		self.id = id
+		self.titleKey = title ?? "Launcher"
+		self.id = id ?? UUID().uuidString
 		self.appName = appName
 		self.version = version
 		self.iconAssetName = iconAssetName
+		self.windowInitializer = windowInitializer ?? {window in}
 		self.actionItems = actionItems
 		self.listItems = listItems
 	}
@@ -75,30 +79,32 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 	 Initialize a new LauncherWindow Scene where the `iconAssetName` parameter equals the `appName` parameter.
 
 	 - Parameters:
-	 - id: A unique string identifier that you can use to open the window.
-	 - titleKey: A localized string key to use for the window’s title in system menus and in the
+	 - title: A localized string key to use for the window’s title in system menus and in the
 	 window’s title bar. Provide a title that describes the purpose of the window. As
 	 a launcher window does not have a title bar and does not appear in the application
-	 window menu, this value has no effect. Default value is `"Launcher"`.
+	 window menu, this value has no effect.
+	 - id: A unique string identifier that you can use to open the window.
 	 - appName: The app name to show in the welcome message.
 	 - version: The version to show below the welcome message.
 	 - actionItems: The view content to display under the welcome message.
 	 - listItems: The view content of the list on the right side of the launcher window.
 	 */
 	public init(
-		withId id: String,
-		andTitle titleKey: LocalizedStringKey = "Launcher",
+		_ title: LocalizedStringKey? = nil,
+		id: String?,
 		appName: String,
 		version: String,
+		windowInitializer: FramelessWindow.WindowInitializer? = nil,
 		actionItems: @escaping () -> ActionItems,
 		listItems: @escaping () -> ListItems
 	) {
 		self.init(
-			withId: id,
-			andTitle: titleKey,
+			title,
+			id: id,
 			appName: appName,
 			version: version,
 			iconAssetName: appName,
+			windowInitializer: windowInitializer,
 			actionItems: actionItems,
 			listItems: listItems
 		)
@@ -108,28 +114,30 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 	 Initialize a new LauncherWindow Scene where the `appName` shall be retrieved from the app bundle.
 
 	 - Parameters:
-	 - id: A unique string identifier that you can use to open the window.
-	 - titleKey: A localized string key to use for the window’s title in system menus and in the
+	 - title: A localized string key to use for the window’s title in system menus and in the
 	 window’s title bar. Provide a title that describes the purpose of the window. As
 	 a launcher window does not have a title bar and does not appear in the application
-	 window menu, this value has no effect. Default value is `"Launcher"`.
+	 window menu, this value has no effect.
+	 - id: A unique string identifier that you can use to open the window.
 	 - version: The version to show below the welcome message.
 	 - actionItems: The view content to display under the welcome message.
 	 - listItems: The view content of the list on the right side of the launcher window.
 	 */
 	public init(
-		withId id: String,
-		andTitle titleKey: LocalizedStringKey = "Launcher",
+		_ title: LocalizedStringKey? = nil,
+		id: String?,
 		version: String,
+		windowInitializer: FramelessWindow.WindowInitializer? = nil,
 		actionItems: @escaping () -> ActionItems,
 		listItems: @escaping () -> ListItems
 	) {
 		let appName = Self.getAppNameFromBundle()
 		self.init(
-			withId: id,
-			andTitle: titleKey,
+			title,
+			id: id,
 			appName: appName,
 			version: version,
+			windowInitializer: windowInitializer,
 			actionItems: actionItems,
 			listItems: listItems
 		)
@@ -140,31 +148,38 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 	 retrieved from the app bundle.
 
 	 - Parameters:
-	 - id: A unique string identifier that you can use to open the window.
-	 - titleKey: A localized string key to use for the window’s title in system menus and in the
+	 - title: A localized string key to use for the window’s title in system menus and in the
 	 window’s title bar. Provide a title that describes the purpose of the window. As
 	 a launcher window does not have a title bar and does not appear in the application
-	 window menu, this value has no effect. Default value is `"Launcher"`.
+	 window menu, this value has no effect.
+	 - id: A unique string identifier that you can use to open the window.
 	 - version: The version to show below the welcome message.
 	 - actionItems: The view content to display under the welcome message.
 	 - listItems: The view content of the list on the right side of the launcher window.
 	 */
 	public init(
-		withId id: String,
-		andTitle titleKey: LocalizedStringKey = "Launcher",
+		_ title: LocalizedStringKey? = nil,
+		id: String?,
+		windowInitializer: FramelessWindow.WindowInitializer? = nil,
 		actionItems: @escaping () -> ActionItems,
 		listItems: @escaping () -> ListItems
 	) {
 		let appName = Self.getAppNameFromBundle()
 		let version = Self.getAppVersionFromBundle()
 		self.init(
-			withId: id,
-			andTitle: titleKey,
+			title,
+			id: id,
 			appName: appName,
 			version: version,
+			windowInitializer: windowInitializer,
 			actionItems: actionItems,
 			listItems: listItems
 		)
+	}
+
+	func modify(window: NSWindow) {
+		window.styleMask.remove(.resizable)
+		self.windowInitializer(window)
 	}
 
 	/**
