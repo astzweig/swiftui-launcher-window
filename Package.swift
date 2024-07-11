@@ -14,6 +14,7 @@ let package = Package(
     targets: [
         .target(name: "LauncherWindow", dependencies: [
             .product(name: "FramelessWindow", package: "swiftui-frameless-window")
-        ])
+        ]),
+		.executableTarget(name: "TestApp", dependencies: ["LauncherWindow"])
     ]
 )

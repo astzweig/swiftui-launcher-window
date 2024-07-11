@@ -31,6 +31,16 @@ The library has enriched symbol documentation for [DocC].
 
 [DocC]: https://www.swift.org/documentation/docc/documenting-a-swift-framework-or-package
 
+## Testing `LauncherWindow`
+LauncherWindow includes an executable target that launches a SwiftUI app to
+test `LauncherWindow`. Either execute it with
+
+```sh
+$ swift run
+```
+
+or select the `LauncherWindowTestApp` under `Product > Scheme` in Xcode.
+
 ## Adding `LauncherWindow` as a Dependency
 
 To use the `LauncherWindow` library in a SwiftUI project, 
