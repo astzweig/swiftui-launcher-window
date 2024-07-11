@@ -35,7 +35,7 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 					self.listItems()
 				}
 			}
-		}.windowResizability(.contentSize)
+		}
 	}
 
 	/**
@@ -178,7 +178,9 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 	}
 
 	func modify(window: NSWindow) {
-		window.styleMask.remove(.resizable)
+		window.styleMask.remove([.resizable])
+		window.disableSnapshotRestoration()
+		window.isRestorable = false
 		self.windowInitializer(window)
 	}
 

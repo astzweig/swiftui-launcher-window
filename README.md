@@ -7,6 +7,9 @@ an item from a list i.e. a database or a folder from many recent ones.
 
 [frameless windows]: /astzweig/swiftui-frameless-window#framelesswindow
 
+> [!NOTE]
+> By default a launcher window is non resizable. If you want it to be resizable use the `.windowResizability` view modifier.
+
 ## Usage
 Create a launcher window:
 

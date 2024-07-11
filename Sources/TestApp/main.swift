@@ -41,7 +41,7 @@ struct RecentSourceFolderListItem: View {
 				Text(url.path())
 					.truncationMode(.head)
 			}
-		}.frame(maxWidth: 300)
+		}
 	}
 }
 
@@ -51,7 +51,7 @@ struct TestApp: App {
 			NewSourceFolderButton()
 		} listItems: {
 			RecentSourceFolderListItem(url: URL(string: "/Users/Shared")!)
-		}
+		}.defaultSize(width: 650, height: 400)
 	}
 
 	func modify(window: NSWindow) {
