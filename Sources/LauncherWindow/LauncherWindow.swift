@@ -93,13 +93,15 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 		actionItems: @escaping () -> ActionItems,
 		listItems: @escaping () -> ListItems
 	) {
-		self.titleKey = titleKey
-		self.id = id
-		self.appName = appName
-		self.version = version
-		self.iconAssetName = appName
-		self.actionItems = actionItems
-		self.listItems = listItems
+		self.init(
+			withId: id,
+			andTitle: titleKey,
+			appName: appName,
+			version: version,
+			iconAssetName: appName,
+			actionItems: actionItems,
+			listItems: listItems
+		)
 	}
 
 	/**
@@ -123,13 +125,14 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 		listItems: @escaping () -> ListItems
 	) {
 		let appName = Self.getAppNameFromBundle()
-		self.titleKey = titleKey
-		self.id = id
-		self.appName = appName
-		self.version = version
-		self.iconAssetName = appName
-		self.actionItems = actionItems
-		self.listItems = listItems
+		self.init(
+			withId: id,
+			andTitle: titleKey,
+			appName: appName,
+			version: version,
+			actionItems: actionItems,
+			listItems: listItems
+		)
 	}
 
 	/**
@@ -154,13 +157,14 @@ public struct LauncherWindow<ActionItems: View, ListItems: View>: Scene {
 	) {
 		let appName = Self.getAppNameFromBundle()
 		let version = Self.getAppVersionFromBundle()
-		self.titleKey = titleKey
-		self.id = id
-		self.appName = appName
-		self.version = version
-		self.iconAssetName = appName
-		self.actionItems = actionItems
-		self.listItems = listItems
+		self.init(
+			withId: id,
+			andTitle: titleKey,
+			appName: appName,
+			version: version,
+			actionItems: actionItems,
+			listItems: listItems
+		)
 	}
 
 	/**
